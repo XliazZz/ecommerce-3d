@@ -1,11 +1,16 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import ModelViewer from '../components/ModelViewer.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Supongamos que trajiste el producto de Supabase
+const product = {
+  title: "Zapatilla Urbana",
+  model_3d_url: "https://swrfyweqtiymakycxxml.supabase.co/storage/v1/object/public/models-3d/69eaaa63-21a0-48cc-861b-4c4f3671a1ec.glb"
+};
 ---
 
 <Layout>
-	<Welcome />
+	<h1>{product.title}</h1>
+	<ModelViewer modelUrl={product.model_3d_url} altText={product.title} />
 </Layout>
+
