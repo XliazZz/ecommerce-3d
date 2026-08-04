@@ -1,4 +1,11 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import CategoriesGrid from "../components/CategoriesGrid.astro";
+import FeaturedProducts from "../components/FeaturedProducts.astro";
+---
+
+<!-- ---
 import Layout from '../layouts/Layout.astro';
 import ModelViewer from '../components/ModelViewer.astro';
 
@@ -14,3 +21,9 @@ const product = {
 	<ModelViewer modelUrl={product.model_3d_url} altText={product.title} />
 </Layout>
 
+ -->
+<Layout title="LUXE STEP – Inicio">
+  <Hero />
+  <CategoriesGrid />
+  <FeaturedProducts />
+</Layout>

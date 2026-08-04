@@ -1,23 +1,79 @@
+---
+// Importaciones y configuración global
+export interface Props {
+  title?: string;
+}
+
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const { title = "LUXE STEP" } = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html class="dark" lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Material Symbols -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Estilos globales adicionales -->
+    <style is:global>
+      body {
+        background-color: #0a0a0a;
+        color: #ffffff;
+        font-family: "Inter", sans-serif;
+      }
+      .hover-scale {
+        transition: transform 200ms ease-out;
+      }
+      .hover-scale:hover {
+        transform: scale(1.02);
+      }
+      .img-container {
+        overflow: hidden;
+        position: relative;
+      }
+      .img-container img {
+        transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+      .img-container:hover img {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+
+  <body
+    class="antialiased min-h-screen flex flex-col font-body-md text-body-md bg-[#0a0a0a] text-white"
+  >
+    <!-- Header incluido en el layout -->
+    <Header />
+
+    <!-- Contenido principal (slot) -->
+    <main class="flex-grow flex flex-col bg-[#0a0a0a]">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <Footer />
+  </body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+<script>
+  import Header from "../components/Header.astro";
+  import Footer from "../components/Footer.astro";
+</script>
