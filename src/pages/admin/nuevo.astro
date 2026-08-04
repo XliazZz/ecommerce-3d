@@ -1,0 +1,179 @@
+---
+// src/pages/admin/nuevo.astro
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Nuevo Producto 3D</title>
+  </head>
+  <body
+    style="background: #111; color: #fff; font-family: sans-serif; padding: 2rem;"
+  >
+    <h1>Subir Zapatilla</h1>
+
+    <form
+      id="upload-form"
+      style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;"
+    >
+      <label>
+        Título del producto:
+        <input
+          type="text"
+          id="title"
+          required
+          style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;"
+        />
+      </label>
+
+      <label>
+        Fotos de la zapatilla (mínimo 1):
+        <input
+          type="file"
+          id="images"
+          multiple
+          accept="image/*"
+          required
+          style="margin-top: 0.5rem;"
+        />
+      </label>
+
+      <button
+        type="submit"
+        style="padding: 0.75rem; background: #fff; color: #000; font-weight: bold; cursor: pointer; border: none;"
+      >
+        Subir y Procesar 3D
+      </button>
+    </form>
+
+    <div id="status" style="margin-top: 1rem;"></div>
+
+    <script>
+      import { supabase } from "../../lib/supabase";
+
+      const form = document.getElementById("upload-form") as HTMLFormElement;
+      const statusDiv = document.getElementById("status")!;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        statusDiv.innerText = "Subiendo imágenes...";
+
+        const titleInput = document.getElementById("title") as HTMLInputElement;
+        const fileInput = document.getElementById("images") as HTMLInputElement;
+
+        const files = Array.from(fileInput.files || []);
+        if (files.length === 0) return;
+
+        const uploadedUrls: string[] = [];
+
+        try {
+          // 1. Subir cada imagen a Supabase Storage
+          for (const file of files) {
+            const fileExt = file.name.split(".").pop();
+            const cleanName = file.name
+              .split(".")[0]
+              .replace(/[^a-zA-Z0-9]/g, "_");
+            const fileName = `${Date.now()}_${cleanName}.${fileExt}`;
+
+            const { data, error } = await supabase.storage
+              .from("product-images")
+              .upload(fileName, file);
+
+            if (error) throw error;
+
+            const { data: publicUrlData } = supabase.storage
+              .from("product-images")
+              .getPublicUrl(fileName);
+
+            uploadedUrls.push(publicUrlData.publicUrl);
+          }
+
+          statusDiv.innerText = "Guardando en la base de datos...";
+
+          // 2. Crear el registro en la tabla products
+          const { data, error } = await supabase
+            .from("products")
+            .insert([
+              {
+                title: titleInput.value,
+                image_urls: uploadedUrls,
+                status: "pending",
+              },
+            ])
+            .select()
+            .single();
+
+          if (error) throw error;
+
+          statusDiv.innerText = "Iniciando generación de modelo 3D con IA...";
+
+          // 3. Llamar a la API local de generación
+          const response3D = await fetch("/api/generate-3d", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              imageUrl: uploadedUrls[0],
+              productId: data.id,
+            }),
+          });
+
+          const rawText = await response3D.text();
+          let res3DData;
+          try {
+            res3DData = JSON.parse(rawText);
+          } catch (err) {
+            throw new Error(
+              `El servidor devolvió respuesta no-JSON (${response3D.status}): ${rawText}`
+            );
+          }
+
+          if (!response3D.ok)
+            throw new Error(res3DData.error || "Error al generar 3D");
+
+          // 4. Actualizar task_id y estado en Supabase
+          await supabase
+            .from("products")
+            .update({ task_id: res3DData.taskId, status: "processing" })
+            .eq("id", data.id);
+
+          statusDiv.innerText =
+            "Procesando modelo 3D con IA... Espere un momento...";
+
+          // 5. Polling automático para consultar el estado hasta que complete
+          const checkStatus = async () => {
+            try {
+              const pollRes = await fetch("/api/check-3d", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  taskId: res3DData.taskId,
+                  productId: data.id,
+                }),
+              });
+
+              const pollData = await pollRes.json();
+
+              if (pollData.status === "processing") {
+                setTimeout(checkStatus, 5000);
+              } else if (pollData.status === "completed") {
+                statusDiv.innerText = `¡Modelo 3D generado y guardado en Supabase exitosamente! URL: ${pollData.modelUrl}`;
+                form.reset();
+              } else {
+                statusDiv.innerText = `Error en el procesamiento 3D. Estado: ${pollData.status}`;
+              }
+            } catch (pollErr: any) {
+              statusDiv.innerText = `Error en verificación: ${
+                pollErr.message || pollErr
+              }`;
+            }
+          };
+
+          checkStatus();
+        } catch (err: any) {
+          console.error(err);
+          statusDiv.innerText = `Error: ${err.message || "Ocurrió un error"}`;
+        }
+      });
+    </script>
+  </body>
+</html>
