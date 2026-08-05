@@ -1,0 +1,72 @@
+---
+export interface Props {
+  id?: string | number;
+  title: string;
+  price: string;
+  imageUrl: string;
+  alt?: string;
+  badge?: string;
+  delay?: string;
+  liked?: boolean;
+  modelUrl?: string;
+}
+
+const {
+  id,
+  title,
+  price,
+  imageUrl,
+  alt = "",
+  badge,
+  delay = "0s",
+  liked = false,
+  modelUrl,
+} = Astro.props;
+
+---
+
+<article
+  class="group relative bg-surface-container-low rounded border border-outline-variant overflow-hidden flex flex-col animate-fade-in"
+  style={`animation-delay: ${delay};`}
+>
+  <div
+    class="relative w-full aspect-[4/5] bg-surface-container overflow-hidden"
+  >
+    <div
+      class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-[1.03]"
+      style={`background-image: url('${imageUrl}');`}
+      role="img"
+      aria-label={alt}
+    >
+    </div>
+    <button
+      class="absolute top-md right-md p-sm bg-surface-container/50 backdrop-blur-sm rounded-full border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-colors opacity-0 group-hover:opacity-100 z-10"
+    >
+      <span
+        class="material-symbols-outlined text-[20px]"
+        data-weight={liked ? "fill" : ""}
+        style={liked ? "font-variation-settings: 'FILL' 1;" : ""}>favorite</span
+      >
+    </button>
+    {
+      badge && (
+        <div class="absolute bottom-md left-md flex items-center gap-xs px-sm py-xs bg-surface-container-lowest/80 backdrop-blur-md rounded border border-outline-variant">
+          <span class="w-2 h-2 rounded-full bg-[#C0C0C0]" />
+          <span class="text-[10px] font-label-caps text-on-surface uppercase tracking-wider">
+            {badge}
+          </span>
+        </div>
+      )
+    }
+  </div>
+  <div
+    class="p-md flex flex-col gap-xs flex-grow justify-end bg-surface-container-low border-t border-outline-variant/50"
+  >
+    <h3 class="text-body-md font-body-md text-primary truncate">{title}</h3>
+    <p
+      class="text-label-caps font-label-caps text-on-surface-variant tracking-widest"
+    >
+      $ {price}
+    </p>
+  </div>
+</article>

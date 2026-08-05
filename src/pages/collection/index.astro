@@ -1,0 +1,62 @@
+---
+import CollectionLayout from "../../layouts/CollectionLayout.astro";
+import FilterSidebar from "../../components/collection/FilterSidebar.astro";
+import ProductGrid from "../../components/collection/ProductGrid.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { createClient } from '@supabase/supabase-js';
+
+export const prerender = false; // Forzar SSR para leer la base de datos en tiempo real
+
+const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+const supabaseKey = import.meta.env.SUPABASE_SERVICE_ROLE_KEY || import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Traer productos con sus variantes
+const { data: products, error } = await supabase
+  .from('products')
+  .select(`
+    *,
+    product_variants (
+      color_name,
+      color_hex,
+      sizes
+    )
+  `)
+  .order('created_at', { ascending: false });
+
+const safeProducts = products || [];
+---
+
+<CollectionLayout title="LUXE STEP - All Footwear">
+  <Header />
+  <div class="flex pt-20 min-h-screen max-w-[1920px] mx-auto">
+    <FilterSidebar />
+    <main class="w-full md:ml-80 px-margin-mobile md:px-margin-desktop py-xl">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-xl gap-lg">
+        <h1 class="text-headline-md font-headline-md text-primary tracking-tight">
+          Todos los zapatos
+          <span class="text-body-md font-body-md text-on-surface-variant ml-sm">({safeProducts.length} items)</span>
+        </h1>
+        <div class="relative min-w-[200px]">
+          <select class="w-full appearance-none bg-surface-container-lowest border border-outline-variant text-body-md font-body-md text-primary py-sm px-md pr-xl rounded cursor-pointer focus:outline-none focus:border-primary transition-colors">
+            <option value="popular">Más Populares</option>
+            <option value="new">Nuevos</option>
+            <option value="price-low">Precio: Bajo a Alto</option>
+            <option value="price-high">Precio: Alto a Bajo</option>
+          </select>
+          <span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+        </div>
+      </div>
+
+      <ProductGrid products={safeProducts} />
+
+      <div class="mt-xl w-full flex justify-center">
+        <button class="bg-transparent border border-outline-variant text-primary text-label-caps font-label-caps py-md px-xxl rounded hover:bg-surface-container-high hover:border-primary transition-all duration-200 uppercase tracking-widest">
+          Ver Más
+        </button>
+      </div>
+    </main>
+  </div>
+  <Footer />
+</CollectionLayout>

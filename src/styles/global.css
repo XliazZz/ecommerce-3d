@@ -151,9 +151,32 @@
   max-width: var(--spacing-container-max);
 }
 
-/* Opcional: si usas otras clases de espaciado (margin, padding, gap) con valores personalizados, añádelas aquí */
-/* Ejemplo: gap-xl, gap-lg, etc. ya son estándar en Tailwind, pero si las tienes personalizadas, las defines */
-/* En tu HTML usas gap-lg, gap-md, etc. que son estándar y ya funcionan. */
+/* ---- Animaciones personalizadas ---- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-/* 4. Dark mode con clase .dark en el elemento html */
+@utility animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* ---- Scrollbar personalizado para el sidebar ---- */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-outline-variant); /* #444748 */
+  border-radius: 4px;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));

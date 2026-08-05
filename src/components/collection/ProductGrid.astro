@@ -1,0 +1,29 @@
+---
+import ProductCard from "./ProductCard.astro";
+
+export interface Props {
+  products: any[];
+}
+
+const { products = [] } = Astro.props;
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+  {products.map((product, index) => {
+    // Tomar la primera imagen del array image_urls o un fallback
+    const mainImage = product.image_urls?.[0] || "https://placehold.co/600x750/111/fff?text=Sin+Imagen";
+    
+    return (
+      <ProductCard
+        id={product.id}
+        title={product.title}
+        price={product.price || "0.00"}
+        imageUrl={mainImage}
+        alt={product.title}
+        badge={product.status === 'completed' ? '3D Ready' : ''}
+        delay={`${(index * 0.1).toFixed(1)}s`}
+        modelUrl={product.model_3d_url}
+      />
+    );
+  })}
+</div>

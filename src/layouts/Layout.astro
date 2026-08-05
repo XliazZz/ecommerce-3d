@@ -5,8 +5,6 @@ export interface Props {
 }
 
 import "../styles/global.css";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
 
 const { title = "LUXE STEP" } = Astro.props;
 ---
@@ -60,16 +58,9 @@ const { title = "LUXE STEP" } = Astro.props;
   <body
     class="antialiased min-h-screen flex flex-col font-body-md text-body-md bg-[#0a0a0a] text-white"
   >
-    <!-- Header incluido en el layout -->
-    <Header />
-
-    <!-- Contenido principal (slot) -->
     <main class="flex-grow flex flex-col bg-[#0a0a0a]">
       <slot />
     </main>
-
-    <!-- Footer -->
-    <Footer />
   </body>
 </html>
 
