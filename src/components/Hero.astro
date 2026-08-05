@@ -1,31 +1,44 @@
+---
+// Hero.astro (versión A)
+---
+
 <section
-  class="relative w-full min-h-[819px] flex flex-col md:flex-row items-center justify-center px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-xxl gap-xxl bg-[#0a0a0a]"
+  class="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0a]"
 >
-  <div class="flex-1 flex flex-col items-start gap-lg z-10">
-    <h1
-      class="text-display-lg-mobile font-display-lg-mobile md:text-display-lg md:font-display-lg text-white uppercase max-w-xl leading-tight"
+  <!-- Imagen de fondo -->
+  <div class="absolute inset-0 z-0">
+    <img
+      class="w-full h-full object-cover object-center"
+      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQVGd58IM8CT-1uWd7Howdr257nKeNgRhQwJHAlYOfoYgFlY6To5yxYP-Er0TdBKrqaLBab7Snh2eX9Z1EAU5twdjXrdtTn80YtY6WXkOkTsStuAabtTRyFjvtstmYHKr_rxQM-kglA3HSLPmgY3iG4c9NKU_ii8qGqyhualgNacHXob0QVY5kRGcakVlcIKJCoFtY01e9l4JDK64rPMSjwcYRz1ksbYKKIiiuZNRZ6VLwHOp0AQKmWA"
+      alt="Zapatilla futurista de lujo"
+    />
+    <!-- Overlay degradado oscuro -->
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent"
     >
-      El Futuro en Cada Paso
-    </h1>
-    <p class="text-body-lg font-body-lg text-gray-300 max-w-md">
-      Ingeniería de precisión. Diseño exclusivo. Experimenta la próxima
-      generación de calzado arquitectónico.
-    </p>
-    <a
-      class="mt-md bg-white text-black rounded px-xl py-md text-label-caps font-label-caps hover:bg-gray-200 transition-colors duration-200"
-      href="#explore"
-    >
-      Explorar Colección
-    </a>
+    </div>
   </div>
 
+  <!-- Contenido textual -->
   <div
-    class="flex-1 w-full h-[512px] md:h-[716px] relative img-container rounded"
+    class="relative z-10 w-full max-w-container-max px-margin-mobile md:px-margin-desktop mx-auto"
   >
-    <img
-      class="w-full h-full object-cover object-center absolute inset-0"
-      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQVGd58IM8CT-1uWd7Howdr257nKeNgRhQwJHAlYOfoYgFlY6To5yxYP-Er0TdBKrqaLBab7Snh2eX9Z1EAU5twdjXrdtTn80YtY6WXkOkTsStuAabtTRyFjvtstmYHKr_rxQM-kglA3HSLPmgY3iG4c9NKU_ii8qGqyhualgNacHXob0QVY5kRGcakVlcIKJCoFtY01e9l4JDK64rPMSjwcYRz1ksbYKKIiiuZNRZ6VLwHOp0AQKmWA"
-      alt="Zapatilla futurista de lujo, con texturas geométricas y acabados metálicos plateados, iluminada por un foco en un estudio negro."
-    />
+    <div class="max-w-2xl">
+      <h1
+        class="text-display-lg-mobile md:text-display-lg font-display-lg text-white uppercase leading-tight"
+      >
+        El Futuro en Cada Paso
+      </h1>
+      <p class="text-body-lg font-body-lg text-gray-300 mt-md max-w-2xl">
+        Ingeniería de precisión. Diseño exclusivo. Experimenta la próxima
+        generación de calzado arquitectónico.
+      </p>
+      <a
+        class="mt-xl inline-block bg-white text-black rounded px-xl py-md text-label-caps font-label-caps hover:bg-gray-200 transition-colors duration-200"
+        href="#explore"
+      >
+        Explorar Colección
+      </a>
+    </div>
   </div>
 </section>

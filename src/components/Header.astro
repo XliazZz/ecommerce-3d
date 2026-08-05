@@ -1,11 +1,11 @@
 <header
-  class="bg-[#0a0a0a] text-white docked full-width top-0 border-b border-outline-variant z-50 sticky"
+  class="bg-[#0a0a0a] text-white border-b border-outline-variant z-50 sticky top-0"
 >
   <div
-    class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto h-20"
+    class="flex md:grid md:grid-cols-3 items-center w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto h-20"
   >
-    <!-- Navigation Links (Left) -->
-    <nav class="hidden md:flex items-center gap-lg">
+    <!-- Navigation (Left) -->
+    <nav class="hidden md:flex items-center gap-lg justify-start">
       <a
         class="text-on-surface-variant text-label-caps font-label-caps hover:text-white transition-colors duration-200"
         href="#">Colecciones</a
@@ -20,16 +20,18 @@
       >
     </nav>
 
-    <!-- Brand Logo (Center) -->
-    <div class="flex-1 flex md:justify-center">
+    <!-- Logo (Center) -->
+    <div class="flex justify-center col-start-2 md:col-start-2">
       <a
         class="text-headline-md font-headline-md tracking-tighter text-white"
         href="#">LUXE STEP</a
       >
     </div>
 
-    <!-- Trailing Icons (Right) -->
-    <div class="flex items-center gap-md justify-end">
+    <!-- Icons (Right) -->
+    <div
+      class="flex items-center gap-md justify-end col-start-3 md:col-start-3"
+    >
       <button
         class="text-on-surface-variant hover:text-white transition-colors duration-200"
       >

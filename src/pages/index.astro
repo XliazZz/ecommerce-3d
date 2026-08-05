@@ -3,6 +3,9 @@ import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import CategoriesGrid from "../components/CategoriesGrid.astro";
 import FeaturedProducts from "../components/FeaturedProducts.astro";
+import FeatureHighlights from "../components/FeatureHighlights.astro";
+import Newsletter from "../components/Newsletter.astro";
+import BrandStatement from "../components/BrandStatement.astro";
 ---
 
 <!-- ---
@@ -24,6 +27,9 @@ const product = {
  -->
 <Layout title="LUXE STEP – Inicio">
   <Hero />
+  <BrandStatement />
   <CategoriesGrid />
   <FeaturedProducts />
+  <FeatureHighlights />
+  <Newsletter />
 </Layout>
